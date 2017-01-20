@@ -19,10 +19,13 @@
 
 package org.apache.cayenne.access.translator.select;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 import org.apache.cayenne.access.translator.DbAttributeBinding;
 import org.apache.cayenne.access.types.ExtendedType;
 import org.apache.cayenne.dba.DbAdapter;
-import org.apache.cayenne.dba.TypesMapping;
 import org.apache.cayenne.exp.Expression;
 import org.apache.cayenne.map.DbAttribute;
 import org.apache.cayenne.map.DbRelationship;
@@ -30,10 +33,6 @@ import org.apache.cayenne.map.EntityResolver;
 import org.apache.cayenne.map.JoinType;
 import org.apache.cayenne.query.Query;
 import org.apache.cayenne.query.QueryMetadata;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
 /**
  * Abstract superclass of Query translators.
@@ -155,10 +154,13 @@ public abstract class QueryAssembler {
 	 *            DbAttribute being processed.
 	 */
 	public void addToParamList(DbAttribute dbAttr, Object anObject) {
-		String typeName = TypesMapping.SQL_NULL;
-		if (dbAttr != null) typeName = TypesMapping.getJavaBySqlType(dbAttr.getType());
-		ExtendedType extendedType = adapter.getExtendedTypes().getRegisteredType(typeName);
-		
+
+//		String typeName = TypesMapping.SQL_NULL;
+//		if (dbAttr != null) typeName = TypesMapping.getJavaBySqlType(dbAttr.getType());
+//		ExtendedType extendedType = adapter.getExtendedTypes().getRegisteredType(typeName);
+
+		ExtendedType extendedType = adapter.getExtendedTypes().getRegisteredType(anObject.getClass().getCanonicalName());
+
 		DbAttributeBinding binding = new DbAttributeBinding(dbAttr, extendedType);
 		binding.setValue(anObject);
 		binding.setStatementPosition(bindings.size() + 1);
